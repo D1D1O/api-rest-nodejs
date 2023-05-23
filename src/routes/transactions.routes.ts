@@ -4,9 +4,34 @@ import { knex } from "../database";
 import { z } from "zod";
 
 export async function transactionsRoutes(app: FastifyInstance) {
-  app.get("/hello", async () => {
+  app.get("/", async () => {
     const transactions = await knex("transactions").select("*");
-    return transactions;
+    return { transactions };
+  });
+
+  app.get("/:id", async (request, reply) => {
+    const getTransactionParamsSchema = z.object({
+      id: z.string().uuid(),
+    });
+    const { id } = getTransactionParamsSchema.parse(request.params);
+
+    try {
+      const transaction = await knex("transactions")
+        .select("*")
+        .where({ id })
+        .first();
+      return { transaction };
+    } catch (error) {
+      return reply.status(404).send();
+    }
+  });
+
+  app.get("/summary", async () => {
+    const summary = await knex("transactions")
+      .sum("amount", { as: "amount" })
+      .first();
+
+    return { summary };
   });
 
   app.post("/", async (request, reply) => {
