@@ -5,9 +5,7 @@ import { z } from "zod";
 import { checkSessionIdExists } from "../middlewares/check-session-id-exists";
 
 export async function transactionsRoutes(app: FastifyInstance) {
-  app.addHook("preHandler", async (request, reply) => {
-    console.log(`[${request.method}] ${request.url}}]`);
-  });
+  app.addHook("preHandler", async (request, reply) => {});
 
   app.get(
     "/",
@@ -34,9 +32,6 @@ export async function transactionsRoutes(app: FastifyInstance) {
       });
       const { id } = getTransactionParamsSchema.parse(request.params);
       const sessionId = request.cookies.session_id;
-
-      console.log(id);
-      console.log(sessionId);
 
       try {
         const transaction = await knex("transactions")
