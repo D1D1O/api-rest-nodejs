@@ -1,13 +1,15 @@
+#Dependencias
 node_modules
-db/app.db
+#Database
+db/*.db
+#Arquivos de configuração
 .env
 .env.test
+#Arquivos gerados pelo sistema
+build
 
 
- npx knex -h
-
-
-
+npx knex -h
 npx knex migrate:make create-transactions
 npx knex migrate:latest
 npx knex migrate:rollback
